@@ -77,18 +77,41 @@ final class ClassLoader
         'WebRoutes' => 'Infrastructure/Entrypoints/Web/Controllers/Config/WebRoutes.php',
 
         // Módulo Cursos
-        'CursoRepositoryInterface' => 'Domain/Models/CursoRepositoryInterface.php',
-        'Domain\Models\CursoRepositoryInterface' => 'Domain/Models/CursoRepositoryInterface.php',
+        'CursoId' => 'Domain/ValueObjects/CursoId.php',
+        'CursoPrecio' => 'Domain/ValueObjects/CursoPrecio.php',
         'CursoModel' => 'Domain/Models/CursoModel.php',
-        'Domain\Models\CursoModel' => 'Domain/Models/CursoModel.php',
-        
+
+        'CreateCursoUseCase' => 'Application/Ports/In/CreateCursoUseCase.php',
+        'UpdateCursoUseCase' => 'Application/Ports/In/UpdateCursoUseCase.php',
+        'GetCursoByIdUseCase' => 'Application/Ports/In/GetCursoByIdUseCase.php',
+        'GetAllCursosUseCase' => 'Application/Ports/In/GetAllCursosUseCase.php',
+        'DeleteCursoUseCase' => 'Application/Ports/In/DeleteCursoUseCase.php',
+
+        'SaveCursoPort' => 'Application/Ports/Out/SaveCursoPort.php',
+        'UpdateCursoPort' => 'Application/Ports/Out/UpdateCursoPort.php',
+        'GetCursoByIdPort' => 'Application/Ports/Out/GetCursoByIdPort.php',
+        'GetAllCursosPort' => 'Application/Ports/Out/GetAllCursosPort.php',
+        'DeleteCursoPort' => 'Application/Ports/Out/DeleteCursoPort.php',
+
+        'CreateCursoCommand' => 'Application/Services/Dto/Commands/CreateCursoCommand.php',
+        'UpdateCursoCommand' => 'Application/Services/Dto/Commands/UpdateCursoCommand.php',
+        'DeleteCursoCommand' => 'Application/Services/Dto/Commands/DeleteCursoCommand.php',
+        'GetCursoByIdQuery' => 'Application/Services/Dto/Queries/GetCursoByIdQuery.php',
+        'GetAllCursosQuery' => 'Application/Services/Dto/Queries/GetAllCursosQuery.php',
+
         'CreateCursoService' => 'Application/Services/CreateCursoService.php',
-        'Application\Services\CreateCursoService' => 'Application/Services/CreateCursoService.php',
+        'UpdateCursoService' => 'Application/Services/UpdateCursoService.php',
+        'GetCursoByIdService' => 'Application/Services/GetCursoByIdService.php',
         'GetAllCursosService' => 'Application/Services/GetAllCursosService.php',
-        'Application\Services\GetAllCursosService' => 'Application/Services/GetAllCursosService.php',
+        'DeleteCursoService' => 'Application/Services/DeleteCursoService.php',
+        'CursoApplicationMapper' => 'Application/Services/Mappers/CursoApplicationMapper.php',
+
+        'CursoPersistenceDto' => 'Infrastructure/Adapters/Persistence/MySQL/Dto/CursoPersistenceDto.php',
+        'CursoEntity' => 'Infrastructure/Adapters/Persistence/MySQL/Entity/CursoEntity.php',
+        'CursoPersistenceMapper' => 'Infrastructure/Adapters/Persistence/MySQL/Mapper/CursoPersistenceMapper.php',
+        'CursoRepositoryMySQL' => 'Infrastructure/Adapters/Persistence/MySQL/Repository/CursoRepositoryMySQL.php',
 
         'CursoController' => 'Infrastructure/Entrypoints/Web/Controllers/CursoController.php',
-        'CursoRepositoryMySQL' => 'Infrastructure/Adapters/Persistence/MySQL/Repository/CursoRepositoryMySQL.php',
 
         'View' => 'Infrastructure/Entrypoints/Web/Presentation/View.php',
         'Flash' => 'Infrastructure/Entrypoints/Web/Presentation/Flash.php',
@@ -108,11 +131,11 @@ final class ClassLoader
         }
 
         $baseDir = dirname(__DIR__) . DIRECTORY_SEPARATOR;
-        $filePath = $baseDir . self::$classMap[$className];
+        $filePath =$baseDir . self::$classMap[$className];
 
         if (!file_exists($filePath)) {
             throw new RuntimeException(
-                sprintf('No se encontró el archivo para la clase %s en %s', $className, $filePath)
+                sprintf('No se encontró el archivo para la clase %s en %s', $className,$filePath)
             );
         }
 
