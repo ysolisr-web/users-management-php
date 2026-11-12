@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/../../Services/Dto/Queries/GetUserByIdQuery.php';
-require_once __DIR__ . '/../../../Domain/Models/UserModel.php';
+require_once __DIR__ . '/../../Services/Dto/Queries/GetCursoByIdQuery.php';
+require_once __DIR__ . '/../../../Domain/Models/CursoModel.php';
 
-interface GetUserByIdUseCase
+interface GetCursoByIdUseCase
 {
-    public function execute(GetUserByIdQuery $query): UserModel;
+    public function execute(GetCursoByIdQuery $query): CursoModel;
 }

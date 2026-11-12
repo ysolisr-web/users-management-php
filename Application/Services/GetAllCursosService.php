@@ -2,17 +2,23 @@
 
 declare(strict_types=1);
 
-class GetAllCursosService
-{
-    private $cursoRepository;
+require_once __DIR__ . '/../Ports/In/GetAllCursosUseCase.php';
+require_once __DIR__ . '/../Ports/Out/GetAllCursosPort.php';
 
-    public function __construct($cursoRepository)
+final class GetAllCursosService implements GetAllCursosUseCase
+{
+    private GetAllCursosPort $getAllCursosPort;
+
+    public function __construct(GetAllCursosPort $getAllCursosPort)
     {
-        $this->cursoRepository = $cursoRepository;
+        $this->getAllCursosPort = $getAllCursosPort;
     }
 
-    public function execute(): array
+    /**
+     * @return CursoModel[]
+     */
+    public function execute(GetAllCursosQuery $query): array
     {
-        return $this->cursoRepository->all();
+        return $this->getAllCursosPort->getAll();
     }
 }

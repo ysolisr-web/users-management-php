@@ -2,31 +2,23 @@
 
 declare(strict_types=1);
 
-class CreateCursoService
-{
-    private $cursoRepository;
+require_once __DIR__ . '/../Ports/In/CreateCursoUseCase.php';
+require_once __DIR__ . '/../Ports/Out/SaveCursoPort.php';
+require_once __DIR__ . '/Mappers/CursoApplicationMapper.php';
 
-    public function __construct($cursoRepository)
+final class CreateCursoService implements CreateCursoUseCase
+{
+    private SaveCursoPort $saveCursoPort;
+
+    public function __construct(SaveCursoPort $saveCursoPort)
     {
-        $this->cursoRepository = $cursoRepository;
+        $this->saveCursoPort = $saveCursoPort;
     }
 
-    public function execute(array $data): void
+    public function execute(CreateCursoCommand $command): CursoModel
     {
-        if (empty($data['nombre'])) {
-            throw new Exception('El nombre del curso es obligatorio.');
-        }
+        $curso = CursoApplicationMapper::fromCreateCommandToModel($command);
 
-        if (empty($data['descripcion'])) {
-            throw new Exception('La descripción del curso es obligatoria.');
-        }
-
-        $curso = new CursoModel(
-            null,
-            $data['nombre'],
-            $data['descripcion']
-        );
-
-        $this->cursoRepository->save($curso);
+        return $this->saveCursoPort->save($curso);
     }
 }

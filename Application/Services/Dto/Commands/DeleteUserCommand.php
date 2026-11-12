@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-final class DeleteUserCommand
+final class DeleteCursoCommand
 {
     private string $id;
 
