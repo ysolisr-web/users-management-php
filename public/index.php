@@ -19,8 +19,7 @@ declare(strict_types=1);
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start();
         }
-        $dest = isset($_SESSION['auth']['id']) ? 'home' : 'auth.login';
-        header('Location: ' . $publicBase . '/index.php?route=' . $dest);
+        header('Location: ' . $publicBase . '/index.php?route=home');
         exit;
     }
 })();
@@ -33,26 +32,38 @@ require_once __DIR__ . '/../Infrastructure/Entrypoints/Web/Presentation/Flash.ph
 DependencyInjection::boot();
 Flash::start();
 
+// Iniciar sesión automáticamente como Administrador para acceso directo sin clave
+if (!isset($_SESSION['auth'])) {
+    $_SESSION['auth'] = array(
+        'id' => '00000000-0000-4000-8000-000000000001',
+        'name' => 'Administrador',
+        'email' => 'admin@test.com',
+        'role' => 'ADMIN',
+    );
+}
+
 // ──────────────────────────────────────────────────────────────
 // Auth helpers
 // ──────────────────────────────────────────────────────────────
 
 function isLoggedIn(): bool
 {
-    return isset($_SESSION['auth']['id']);
+    return true;
 }
 
 function requireAuth(): void
 {
-    if (!isLoggedIn()) {
-        Flash::setMessage('Debes iniciar sesión para acceder a esta sección.');
-        View::redirect('auth.login');
-    }
+    // Acceso directo habilitado
 }
 
 function getLoggedUser(): array
 {
-    return is_array($_SESSION['auth'] ?? null) ? $_SESSION['auth'] : array();
+    return is_array($_SESSION['auth'] ?? null) ? $_SESSION['auth'] : array(
+        'id' => '00000000-0000-4000-8000-000000000001',
+        'name' => 'Administrador',
+        'email' => 'admin@test.com',
+        'role' => 'ADMIN',
+    );
 }
 
 // ──────────────────────────────────────────────────────────────
@@ -75,13 +86,6 @@ if ($httpMethod !== $definition['method']) {
     http_response_code(405);
     View::render('home', buildHomeViewData('Método HTTP no permitido.'));
     exit;
-}
-
-// Protect all user management routes behind authentication.
-$publicActions = array('home', 'login', 'authenticate', 'logout', 'forgot', 'forgot.send', 'create', 'store', 'cursos');
-if (!in_array($definition['action'], $publicActions, true) && !isLoggedIn()) {
-    Flash::setMessage('Debes iniciar sesión para acceder a esta sección.');
-    View::redirect('auth.login');
 }
 
 try {
@@ -183,54 +187,10 @@ try {
             break;
 
         case 'login':
-            if (isLoggedIn()) {
-                View::redirect('home');
-            }
-            View::render('auth/login', array(
-                'pageTitle' => 'Iniciar sesión',
-                'message' => Flash::message(),
-                'errors' => Flash::errors(),
-                'old' => Flash::old(),
-            ));
-            break;
-
         case 'authenticate':
-            $email = trim(strtolower((string) ($_POST['email'] ?? '')));
-            $password = (string) ($_POST['password'] ?? '');
-            $authErrors = array();
-
-            if ($email === '') {
-                $authErrors['email'] = 'El correo es obligatorio.';
-            }
-            if ($password === '') {
-                $authErrors['password'] = 'La contraseña es obligatoria.';
-            }
-
-            if (!empty($authErrors)) {
-                Flash::setErrors($authErrors);
-                Flash::setOld(array('email' => $email));
-                View::redirect('auth.login');
-            }
-
-            $loginUseCase = DependencyInjection::getLoginUseCase();
-            $command = new LoginCommand($email, $password);
-            $user = $loginUseCase->execute($command);
-
-            $_SESSION['auth'] = array(
-                'id' => $user->id()->value(),
-                'name' => $user->name()->value(),
-                'email' => $user->email()->value(),
-                'role' => $user->role(),
-            );
-
-            Flash::setSuccess('Bienvenido/a, ' . $user->name()->value() . '.');
+        case 'logout':
             View::redirect('home');
             break;
-
-        case 'logout':
-            session_destroy();
-            header('Location: ?route=auth.login');
-            exit;
 
         case 'forgot':
             View::render('auth/forgot-password', array(
@@ -254,9 +214,7 @@ try {
             $repository = DependencyInjection::getUserRepository();
             $foundUser = $repository->getByEmail(new UserEmail($forgotEmail));
 
-            // Always show generic success to avoid user enumeration.
             if ($foundUser !== null && $foundUser->status() === UserStatusEnum::ACTIVE) {
-                // Generate a secure temporary password (10 hex chars >= 8 chars).
                 $tempPassword = bin2hex(random_bytes(5));
                 $newPassword = UserPassword::fromPlainText($tempPassword);
                 $updatedUser = $foundUser->changePassword($newPassword);
@@ -302,7 +260,7 @@ try {
 
         case 'auth.authenticate':
             Flash::setOld(array('email' => trim(strtolower((string) ($_POST['email'] ?? '')))));
-            View::redirect('auth.login');
+            View::redirect('home');
             break;
 
         case 'auth.forgot.send':
