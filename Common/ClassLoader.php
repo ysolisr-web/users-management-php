@@ -76,6 +76,20 @@ final class ClassLoader
         'UserController' => 'Infrastructure/Entrypoints/Web/Controllers/UserController.php',
         'WebRoutes' => 'Infrastructure/Entrypoints/Web/Controllers/Config/WebRoutes.php',
 
+        // Módulo Cursos
+        'CursoRepositoryInterface' => 'Domain/Models/CursoRepositoryInterface.php',
+        'Domain\Models\CursoRepositoryInterface' => 'Domain/Models/CursoRepositoryInterface.php',
+        'CursoModel' => 'Domain/Models/CursoModel.php',
+        'Domain\Models\CursoModel' => 'Domain/Models/CursoModel.php',
+        
+        'CreateCursoService' => 'Application/Services/CreateCursoService.php',
+        'Application\Services\CreateCursoService' => 'Application/Services/CreateCursoService.php',
+        'GetAllCursosService' => 'Application/Services/GetAllCursosService.php',
+        'Application\Services\GetAllCursosService' => 'Application/Services/GetAllCursosService.php',
+
+        'CursoController' => 'Infrastructure/Entrypoints/Web/Controllers/CursoController.php',
+        'CursoRepositoryMySQL' => 'Infrastructure/Adapters/Persistence/MySQL/Repository/CursoRepositoryMySQL.php',
+
         'View' => 'Infrastructure/Entrypoints/Web/Presentation/View.php',
         'Flash' => 'Infrastructure/Entrypoints/Web/Presentation/Flash.php',
 

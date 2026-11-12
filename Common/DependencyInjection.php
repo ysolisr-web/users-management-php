@@ -49,6 +49,49 @@ final class DependencyInjection
         );
     }
 
+    public static function getCursoRepository(): CursoRepositoryMySQL
+    {
+        ClassLoader::loadClass('CursoRepositoryInterface');
+        ClassLoader::loadClass('Domain\Models\CursoRepositoryInterface');
+        ClassLoader::loadClass('CursoModel');
+        ClassLoader::loadClass('Domain\Models\CursoModel');
+        ClassLoader::loadClass('CursoRepositoryMySQL');
+
+        return new CursoRepositoryMySQL(
+            self::getPdo()
+        );
+    }
+
+    public static function getCreateCursoService(): CreateCursoService
+    {
+        ClassLoader::loadClass('CreateCursoService');
+        ClassLoader::loadClass('Application\Services\CreateCursoService');
+
+        return new CreateCursoService(
+            self::getCursoRepository()
+        );
+    }
+
+    public static function getGetAllCursosService(): GetAllCursosService
+    {
+        ClassLoader::loadClass('GetAllCursosService');
+        ClassLoader::loadClass('Application\Services\GetAllCursosService');
+
+        return new GetAllCursosService(
+            self::getCursoRepository()
+        );
+    }
+
+    public static function getCursoController(): CursoController
+    {
+        ClassLoader::loadClass('CursoController');
+
+        return new CursoController(
+            self::getCreateCursoService(),
+            self::getGetAllCursosService()
+        );
+    }
+
     public static function getEmailSenderService(): EmailSenderService
     {
         ClassLoader::loadClass('EmailSenderService');

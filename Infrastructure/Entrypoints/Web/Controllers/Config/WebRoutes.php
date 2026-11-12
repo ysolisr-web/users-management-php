@@ -62,6 +62,14 @@ final class WebRoutes
                 'method' => 'POST',
                 'action' => 'forgot.send',
             ),
+            'cursos' => array(
+                'method' => 'GET',
+                'action' => 'cursos',
+            ),
+            'cursos.store' => array(
+                'method' => 'POST',
+                'action' => 'cursos',
+            ),
         );
     }
 }

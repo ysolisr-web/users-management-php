@@ -6,7 +6,7 @@ declare(strict_types=1);
 // El .htaccess redirige internamente cualquier URL que no sea public/ hacia aquí.
 // Detectamos ese caso comparando la URL solicitada con la ruta pública esperada.
 
-(function (): void{
+(function (): void {
     $requestPath = rtrim(
         (string) parse_url((string) ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH),
         '/'
@@ -78,7 +78,7 @@ if ($httpMethod !== $definition['method']) {
 }
 
 // Protect all user management routes behind authentication.
-$publicActions = array('home', 'login', 'authenticate', 'logout', 'forgot', 'forgot.send', 'create', 'store');
+$publicActions = array('home', 'login', 'authenticate', 'logout', 'forgot', 'forgot.send', 'create', 'store', 'cursos');
 if (!in_array($definition['action'], $publicActions, true) && !isLoggedIn()) {
     Flash::setMessage('Debes iniciar sesión para acceder a esta sección.');
     View::redirect('auth.login');
@@ -232,7 +232,6 @@ try {
             header('Location: ?route=auth.login');
             exit;
 
-
         case 'forgot':
             View::render('auth/forgot-password', array(
                 'pageTitle' => 'Recuperar contraseña',
@@ -246,7 +245,7 @@ try {
         case 'forgot.send':
             $forgotEmail = trim(strtolower((string) ($_POST['email'] ?? '')));
 
-            if ($forgotEmail === '' || !filter_var($forgotEmail, FILTER_VALIDATE_EMAIL)) {
+            if ($forgotEmail === '' or !filter_var($forgotEmail, FILTER_VALIDATE_EMAIL)) {
                 Flash::setErrors(array('email' => 'Introduce un correo electrónico válido.'));
                 Flash::setOld(array('email' => $forgotEmail));
                 View::redirect('auth.forgot');
@@ -257,7 +256,7 @@ try {
 
             // Always show generic success to avoid user enumeration.
             if ($foundUser !== null && $foundUser->status() === UserStatusEnum::ACTIVE) {
-                // Generate a secure temporary password (10 hex chars ≥ 8 chars).
+                // Generate a secure temporary password (10 hex chars >= 8 chars).
                 $tempPassword = bin2hex(random_bytes(5));
                 $newPassword = UserPassword::fromPlainText($tempPassword);
                 $updatedUser = $foundUser->changePassword($newPassword);
@@ -275,6 +274,11 @@ try {
                 'recibirás un mensaje con tu contraseña temporal.'
             );
             View::redirect('auth.forgot');
+            break;
+
+        case 'cursos':
+            $controller = DependencyInjection::getCursoController();
+            $controller->handleRequest();
             break;
 
         default:
