@@ -2,50 +2,26 @@
 
 declare(strict_types=1);
 
-final class CreateCursoCommand
+final class CreateUserCommand
 {
     private string $id;
-    private string $nombre;
-    private float $precio;
-    private int $horas;
-    private string $nivel;
-    private string $profesor;
-    private string $institucion;
-    private string $fechaInicio;
-    private string $fechaFin;
-    private int $numAlumnos;
-    private string $modalidad;
-    private string $descripcion;
-    private string $estado;
+    private string $name;
+    private string $email;
+    private string $password;
+    private string $role;
 
     public function __construct(
         string $id,
-        string $nombre,
-        float $precio,
-        int $horas,
-        string $nivel,
-        string $profesor,
-        string $institucion,
-        string $fechaInicio,
-        string $fechaFin,
-        int $numAlumnos,
-        string $modalidad,
-        string $descripcion,
-        string $estado = 'ACTIVO'
+        string $name,
+        string $email,
+        string $password,
+        string $role
     ) {
         $this->id = trim($id);
-        $this->nombre = trim($nombre);
-        $this->precio = $precio;
-        $this->horas = $horas;
-        $this->nivel = trim($nivel);
-        $this->profesor = trim($profesor);
-        $this->institucion = trim($institucion);
-        $this->fechaInicio = trim($fechaInicio);
-        $this->fechaFin = trim($fechaFin);
-        $this->numAlumnos = $numAlumnos;
-        $this->modalidad = trim($modalidad);
-        $this->descripcion = trim($descripcion);
-        $this->estado = trim($estado);
+        $this->name = trim($name);
+        $this->email = trim($email);
+        $this->password = $password;
+        $this->role = trim($role);
     }
 
     public function getId(): string
@@ -53,63 +29,23 @@ final class CreateCursoCommand
         return $this->id;
     }
 
-    public function getNombre(): string
+    public function getName(): string
     {
-        return $this->nombre;
+        return $this->name;
     }
 
-    public function getPrecio(): float
+    public function getEmail(): string
     {
-        return $this->precio;
+        return $this->email;
     }
 
-    public function getHoras(): int
+    public function getPassword(): string
     {
-        return $this->horas;
+        return $this->password;
     }
 
-    public function getNivel(): string
+    public function getRole(): string
     {
-        return $this->nivel;
-    }
-
-    public function getProfesor(): string
-    {
-        return $this->profesor;
-    }
-
-    public function getInstitucion(): string
-    {
-        return $this->institucion;
-    }
-
-    public function getFechaInicio(): string
-    {
-        return $this->fechaInicio;
-    }
-
-    public function getFechaFin(): string
-    {
-        return $this->fechaFin;
-    }
-
-    public function getNumAlumnos(): int
-    {
-        return $this->numAlumnos;
-    }
-
-    public function getModalidad(): string
-    {
-        return $this->modalidad;
-    }
-
-    public function getDescripcion(): string
-    {
-        return $this->descripcion;
-    }
-
-    public function getEstado(): string
-    {
-        return $this->estado;
+        return $this->role;
     }
 }
