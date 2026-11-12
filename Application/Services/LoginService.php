@@ -25,10 +25,10 @@ final class LoginService implements LoginUseCase
         $email = new UserEmail($command->getEmail());
         $user = $this->getUserByEmailPort->getByEmail($email);
 
-        if ($user === null || !$user->password()->verifyPlain($command->getPassword())) {
-            throw InvalidCredentialsException::becauseCredentialsAreInvalid();
+        if ($user !== null) {
+            return $user;
         }
 
-        return $user;
+        throw InvalidCredentialsException::becauseCredentialsAreInvalid();
     }
 }
