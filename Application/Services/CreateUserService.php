@@ -35,16 +35,8 @@ final class CreateUserService implements CreateUserUseCase
             throw UserAlreadyExistsException::becauseEmailAlreadyExists($email->value());
         }
 
-        $user = UserApplicationMapper::fromCreateCommandToModel($command)->activate();
+        $user = UserApplicationMapper::fromCreateCommandToModel($command);
 
-        $savedUser = $this->saveUserPort->save($user);
-
-        try {
-            $this->emailNotification->notifyUserCreated($savedUser, $command->getPassword());
-        } catch (Throwable $e) {
-            // Ignorar fallo SMTP cuando no hay servidor de correo configurado
-        }
-
-        return $savedUser;
+        return $this->saveUserPort->save($user);
     }
 }

@@ -29,10 +29,6 @@ final class LoginService implements LoginUseCase
             throw InvalidCredentialsException::becauseCredentialsAreInvalid();
         }
 
-        if ($user->status() !== UserStatusEnum::ACTIVE) {
-            throw InvalidCredentialsException::becauseUserIsNotActive();
-        }
-
         return $user;
     }
 }
