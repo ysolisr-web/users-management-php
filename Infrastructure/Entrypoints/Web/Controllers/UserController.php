@@ -11,6 +11,10 @@ require_once __DIR__ . '/../../../../Application/Ports/In/GetAllUsersUseCase.php
 require_once __DIR__ . '/../../../../Application/Ports/In/DeleteUserUseCase.php';
 
 require_once __DIR__ . '/../../../../Application/Services/Dto/Queries/GetAllUsersQuery.php';
+require_once __DIR__ . '/../../../../Application/Services/Dto/Queries/GetUserByIdQuery.php';
+require_once __DIR__ . '/../../../../Application/Services/Dto/Commands/CreateUserCommand.php';
+require_once __DIR__ . '/../../../../Application/Services/Dto/Commands/UpdateUserCommand.php';
+require_once __DIR__ . '/../../../../Application/Services/Dto/Commands/DeleteUserCommand.php';
 
 final class UserController
 {
